@@ -49,8 +49,7 @@ func RssHandler(redditURL string, now NowFn, client *http.Client, getArticle Get
 
 	log.Println(r.URL)
 
-	// Hard code the reddit URL
-	url := fmt.Sprintf("%s%s", "https://reddit.com", r.URL)
+	url := fmt.Sprintf("%s%s", redditURL, r.URL)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		log.Println("error get")
