@@ -49,9 +49,11 @@ func RssHandler(redditURL string, now NowFn, client *http.Client, getArticle Get
 
 	log.Println(r.URL)
 
-	url := fmt.Sprintf("%s%s", redditURL, r.URL)
+	// Hard code the reddit URL
+	url := fmt.Sprintf("%s%s", "https://reddit.com", r.URL)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
+		log.Println("error get")
 		http.Error(w, err.Error(), 500)
 		return
 	}
@@ -60,6 +62,7 @@ func RssHandler(redditURL string, now NowFn, client *http.Client, getArticle Get
 
 	resp, err := client.Do(req)
 	if err != nil {
+		log.Println("error user-agent")
 		http.Error(w, err.Error(), 500)
 		return
 	}
@@ -68,6 +71,8 @@ func RssHandler(redditURL string, now NowFn, client *http.Client, getArticle Get
 	var result linkListing
 	err = json.NewDecoder(resp.Body).Decode(&result)
 	if err != nil {
+		log.Println("error decode")
+		log.Printf("resp: %s", resp)
 		http.Error(w, err.Error(), 500)
 		return
 	}
@@ -87,6 +92,7 @@ func RssHandler(redditURL string, now NowFn, client *http.Client, getArticle Get
 	if scoreLimit {
 		limit, err = strconv.Atoi(limitStr[0])
 		if err != nil {
+			log.Println("error score")
 			scoreLimit = false
 		}
 	}
@@ -133,6 +139,7 @@ func RssHandler(redditURL string, now NowFn, client *http.Client, getArticle Get
 
 	rss, err := feed.ToRss()
 	if err != nil {
+		log.Println("error to rss")
 		http.Error(w, err.Error(), 500)
 	}
 
