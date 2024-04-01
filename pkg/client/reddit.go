@@ -72,6 +72,7 @@ func RssHandler(redditURL string, now NowFn, client *http.Client, getArticle Get
 	err = json.NewDecoder(resp.Body).Decode(&result)
 	if err != nil {
 		log.Println("error decode")
+		log.Printf("req: %s", req)
 		log.Printf("resp: %s", resp)
 		http.Error(w, err.Error(), 500)
 		return
