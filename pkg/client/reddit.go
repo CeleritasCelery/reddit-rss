@@ -58,7 +58,7 @@ func RssHandler(redditURL string, now NowFn, client *http.Client, getArticle Get
 		return
 	}
 
-	req.Header.Add("User-Agent", "reddit-rss 1.0")
+	req.Header.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:124.0) Gecko/20100101 Firefox/124.0")
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -157,7 +157,7 @@ func linkToFeed(client *http.Client, getArticle GetArticleFn, link *reddit.Link)
 	}
 	redditUrl := os.Getenv("REDDIT_URL")
 	if redditUrl == "" {
-		redditUrl = "https://old.reddit.com"
+		redditUrl = "https://reddit.com"
 	}
 	author := link.Author
 	authorLink := fmt.Sprintf("%s/u/%s", redditUrl, author)
@@ -169,7 +169,7 @@ func linkToFeed(client *http.Client, getArticle GetArticleFn, link *reddit.Link)
 	t := time.Unix(int64(link.CreatedUtc), 0)
 	// if item link is to reddit, replace reddit with REDDIT_URL
 	itemLink := link.URL
-	if strings.HasPrefix(itemLink, "https://old.reddit.com") {
+	if strings.HasPrefix(itemLink, "https://reddit.com") {
 		itemLink = fmt.Sprintf(`%s%s`, redditUrl, link.Permalink)
 	}
 	return &feeds.Item{
